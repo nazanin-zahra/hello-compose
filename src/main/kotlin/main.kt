@@ -2,9 +2,7 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +34,22 @@ fun main() = Window(title = "Hello Compose Application") {
                 Button(onClick = {}) {
                     Text("Run")
                 }
-                Spacer(modifier = Modifier.size(width = 8.dp, 1.dp))
+                Spacer(modifier = Modifier.size(width = 8.dp, height = 1.dp))
                 Button(onClick = {}) {
                     Text("End")
                 }
             }
+
+            Spacer(Modifier.height(8.dp))
+
+            Checkbox(
+                checked = true,
+                onCheckedChange = null,
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color.Red,
+                    uncheckedColor = Color.Blue
+                )
+            )
         }
     }
 }
