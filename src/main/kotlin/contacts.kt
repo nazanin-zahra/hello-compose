@@ -44,6 +44,7 @@ fun main() = Window(title = "Contacts") {
                 ContactItem(contact.name, contact.imageName)
             }
         }
+        if you write it like this you wont be able to see other contacts whicj are not in the screen
 */
 
         LazyColumn {
@@ -52,6 +53,7 @@ fun main() = Window(title = "Contacts") {
             }
         }
     }
+    //item () is itorator of list
 }
 
 @ExperimentalUnitApi
