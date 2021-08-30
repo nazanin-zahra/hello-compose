@@ -10,12 +10,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
 
 @ExperimentalUnitApi
 fun main() = Window(title = "Hello Compose Application") {
-    MaterialTheme {
+    MaterialTheme (colors = MaterialTheme.colors.copy(primary = Color.Green)){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -34,8 +36,8 @@ fun main() = Window(title = "Hello Compose Application") {
                 Button(onClick = {}) {
                     Text("Run")
                 }
-                Spacer(modifier = Modifier.size(width = 8.dp, height = 1.dp))
-                Button(onClick = {}) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = {},modifier = Modifier.padding(start = 8.dp)) {
                     Text("End")
                 }
             }
@@ -62,7 +64,7 @@ private fun Header() {
         fontSize = TextUnit(25f, TextUnitType.Sp),
         fontWeight = FontWeight.Bold,
         color = Color.Red,
-        textAlign = TextAlign.Center,
+      //  textAlign = TextAlign.Center,
         modifier = Modifier.width(IntrinsicSize.Max)
     )
 }
