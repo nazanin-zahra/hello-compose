@@ -52,7 +52,7 @@ fun main() = Window(title = "calls") {
     MaterialTheme {
         LazyColumn {
             items(callLog) { call: Call ->
-                callName(
+                CallRow(
                     createdAt = call.createdAt.toString().substring(0, 10),
                     name = call.name,
                     type = call.type,
@@ -68,7 +68,7 @@ fun main() = Window(title = "calls") {
 
 @ExperimentalUnitApi
 @Composable
-fun callName(createdAt: String, phoneNumber: String, type: Type, imageResource: String, name: String) {
+fun CallRow(createdAt: String, phoneNumber: String, type: Type, imageResource: String, name: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
