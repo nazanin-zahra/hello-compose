@@ -17,26 +17,34 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import java.util.*
 
-class Call(val createdAt: String, val phoneNumber: String, val type: Type, val imageResource: String, val name: String)
+class Call(
+    val createdAt: Date,
+    val phoneNumber: String,
+    val type: Type,
+    val imageResource: String,
+    val name: String
+)
+
 enum class Type {
     In,
     Out
 }
 
 val callLog = listOf<Call>(
-    Call("2021/11/10", "09121231231", Type.In, "venom.jpg", "farhad"),
-    Call("2021/11/11", "09363456789", Type.Out, "venom.jpg", "nazanin"),
-    Call("2021/11/11", "09112345678", Type.Out, "flower.jpg", "feri"),
-    Call("2021/11/11", "09112345678", Type.Out, "flower.jpg", "ati"),
-    Call("2021/11/11", "09112345678", Type.Out, "venom.jpg", "poyan"),
-    Call("2021/11/11", "09112345678", Type.Out, "flower.jpg", "atiyeh"),
-    Call("2021/11/10", "09121231231", Type.In, "flower.jpg", "sara"),
-    Call("2021/11/11", "09363456789", Type.Out, "venom.jpg", "hany"),
-    Call("2021/11/11", "09112345678", Type.Out, "flower.jpg", "max"),
-    Call("2021/11/10", "09121231231", Type.In, "venom.jpg", "jony"),
-    Call("2021/11/11", "09363456789", Type.Out, "flower.jpg", "jeimen"),
-    Call("2021/11/11", "09112345678", Type.Out, "venom.jpg", "kok"),
+    Call(Date(2021, 11, 9), "09121231231", Type.In, "venom.jpg", "farhad"),
+    Call(Date(2021, 11, 9), "09363456789", Type.Out, "venom.jpg", "nazanin"),
+    Call(Date(2021, 11, 10), "09112345678", Type.Out, "flower.jpg", "feri"),
+    Call(Date(2021, 11, 10), "09112345678", Type.Out, "flower.jpg", "ati"),
+    Call(Date(2021, 11, 10), "09112345678", Type.Out, "venom.jpg", "poyan"),
+    Call(Date(2021, 11, 11), "09112345678", Type.Out, "flower.jpg", "atiyeh"),
+    Call(Date(2021, 11, 11), "09121231231", Type.In, "flower.jpg", "sara"),
+    Call(Date(2021, 11, 11), "09363456789", Type.Out, "venom.jpg", "hany"),
+    Call(Date(2021, 11, 12), "09112345678", Type.Out, "flower.jpg", "max"),
+    Call(Date(2021, 11, 12), "09121231231", Type.In, "venom.jpg", "jony"),
+    Call(Date(2021, 11, 12), "09363456789", Type.Out, "flower.jpg", "jeimen"),
+    Call(Date(2021, 11, 12), "09112345678", Type.Out, "venom.jpg", "kok"),
 )
 
 @ExperimentalUnitApi
@@ -45,7 +53,7 @@ fun main() = Window(title = "calls") {
         LazyColumn {
             items(callLog) { call: Call ->
                 callName(
-                    createdAt = call.createdAt,
+                    createdAt = call.createdAt.toString().substring(0, 10),
                     name = call.name,
                     type = call.type,
                     imageResource = call.imageResource,
