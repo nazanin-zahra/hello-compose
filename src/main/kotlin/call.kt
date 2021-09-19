@@ -1,10 +1,10 @@
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +32,7 @@ enum class Type {
     Out
 }
 
-val callLog = listOf<Call>(
+val callLog = mutableListOf(
     Call(Date(2021, 11, 9), "09121231231", Type.In, "venom.jpg", "farhad"),
     Call(Date(2021, 11, 9), "09363456789", Type.Out, "venom.jpg", "nazanin"),
     Call(Date(2021, 11, 10), "09112345678", Type.Out, "flower.jpg", "feri"),
@@ -52,13 +52,7 @@ fun main() = Window(title = "calls") {
     MaterialTheme {
         LazyColumn {
             items(callLog) { call: Call ->
-                CallRow(
-                    createdAt = call.createdAt.toString().substring(0, 10),
-                    name = call.name,
-                    type = call.type,
-                    imageResource = call.imageResource,
-                    phoneNumber = call.phoneNumber
-                )
+                CallRow(call)
             }
         }
     }
@@ -68,17 +62,12 @@ fun main() = Window(title = "calls") {
 
 @ExperimentalUnitApi
 @Composable
-fun CallRow(createdAt: String, phoneNumber: String, type: Type, imageResource: String, name: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable {}
-    ) {
+fun CallRow(call: Call) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
-            bitmap = imageResource(imageResource),
+            bitmap = imageResource(call.imageResource),
             contentDescription = null,
             modifier = Modifier
-
                 .size(70.dp)
                 .padding(12.dp)
                 .clip(CircleShape)
@@ -86,22 +75,30 @@ fun CallRow(createdAt: String, phoneNumber: String, type: Type, imageResource: S
 
         Column {
             Text(
-                "$name",
+                call.name,
                 fontSize = TextUnit(20f, TextUnitType.Sp),
                 fontWeight = FontWeight.Bold,
             )
             Row {
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    "$phoneNumber   ",
+                    call.phoneNumber,
                     fontSize = TextUnit(15f, TextUnitType.Sp),
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    "$createdAt",
+                    call.createdAt.toString().substring(0, 10),
                     fontWeight = FontWeight.Thin,
                     fontSize = TextUnit(12f, TextUnitType.Sp)
                 )
             }
+        }
+
+        Spacer(Modifier.width(8.dp))
+
+        Button(onClick = {
+            callLog.remove(call)
+        }) {
+            Text("Del")
         }
     }
 }
