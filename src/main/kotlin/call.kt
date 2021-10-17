@@ -96,9 +96,9 @@ fun CallRow(call: Call) {
         Spacer(Modifier.width(8.dp))
 
         Button(onClick = {
-            callLog.remove(call)
+      //      remember { mutableListOf( callLog.remove(call))}
         }) {
-            Text("Del")
+       Text("Delete")
         }
     }
 }
