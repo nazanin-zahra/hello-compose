@@ -8,9 +8,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +30,7 @@ import androidx.compose.ui.window.application
 
 data class Contact(val name: String, val imageName: String)
 
-val contacts = listOf(
+val contacts = mutableStateListOf(
     Contact("Nazi", "venom.jpg"),
     Contact("Feri", "flower.jpg"),
     Contact("Ati", "venom.jpg"),
@@ -52,9 +57,10 @@ fun main() = application {
                     modifier = Modifier
                         .weight(0.4f)
                         .background(color = Color.LightGray)
+                        .fillMaxHeight()
                 ) {
                     items(contacts) { contact ->
-                        ContactItem(contact.name, contact.imageName)
+                        ContactItem(contact)
                     }
                 }
 
@@ -71,7 +77,7 @@ fun main() = application {
 }
 
 @Composable
-fun ContactItem(name: String, imageName: String) {
+fun ContactItem(contact: Contact) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -79,10 +85,9 @@ fun ContactItem(name: String, imageName: String) {
             .clickable {}
             .padding(8.dp)
             .fillMaxWidth()
-
     ) {
         Image(
-            painter = painterResource(imageName),
+            painter = painterResource( contact.imageName),
             contentDescription = "This image contains some flower.",
             modifier = Modifier
                 .clip(CircleShape)
@@ -92,10 +97,18 @@ fun ContactItem(name: String, imageName: String) {
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = name,
+            text = contact.name,
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f)
         )
+        IconButton(onClick = {
+            contacts.remove(contact)
+        }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null
+            )
+        }
     }
 }

@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("androidx.compose.material:material:1.0.0-alpha4-build362")
 }
 
 tasks.withType<KotlinCompile>() {
