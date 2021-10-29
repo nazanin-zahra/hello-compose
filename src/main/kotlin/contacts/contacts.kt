@@ -53,6 +53,8 @@ fun main() = application {
     ) {
         MaterialTheme {
             Row {
+                val nameState = remember { mutableStateOf("") }
+
                 LazyColumn(
                     modifier = Modifier
                         .weight(0.4f)
@@ -60,7 +62,10 @@ fun main() = application {
                         .fillMaxHeight()
                 ) {
                     items(contacts) { contact ->
-                        ContactItem(contact)
+                        ContactItem(contact,
+                            onContactClick = {
+                                nameState.value = contact.name
+                            })
                     }
                 }
 
@@ -71,7 +76,6 @@ fun main() = application {
                         .fillMaxHeight()
                 ) {
                     Spacer(modifier = Modifier.height(36.dp))
-                    val nameState = remember { mutableStateOf("") }
                     OutlinedTextField(
                         value = nameState.value,
                         onValueChange = { newValue ->
@@ -99,12 +103,12 @@ fun main() = application {
 }
 
 @Composable
-fun ContactItem(contact: Contact) {
+fun ContactItem(contact: Contact, onContactClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .clickable {}
+            .clickable { onContactClick() }
             .padding(8.dp)
             .fillMaxWidth()
     ) {
