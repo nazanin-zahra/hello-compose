@@ -1,17 +1,20 @@
 package contacts
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -44,22 +47,26 @@ fun main() = application {
         onCloseRequest = { exitApplication() }
     ) {
         MaterialTheme {
-/*
-        Column {
-            contacts.forEach { contact ->
-                ContactItem(contact.name, contact.imageName)
-            }
-        }
-        if you write it like this you wont be able to see other contacts whicj are not in the screen
-*/
+            Row {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .background(color = Color.LightGray)
+                ) {
+                    items(contacts) { contact ->
+                        ContactItem(contact.name, contact.imageName)
+                    }
+                }
 
-            LazyColumn {
-                items(contacts) { contact ->
-                    ContactItem(contact.name, contact.imageName)
+                Box(
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .fillMaxHeight()
+                ) {
+
                 }
             }
         }
-        //item () is itorator of list
     }
 }
 
@@ -68,8 +75,10 @@ fun ContactItem(name: String, imageName: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
             .clickable {}
             .padding(8.dp)
+            .fillMaxWidth()
 
     ) {
         Image(
@@ -86,6 +95,7 @@ fun ContactItem(name: String, imageName: String) {
             text = name,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
+
         )
     }
 }
