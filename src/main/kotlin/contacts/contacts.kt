@@ -30,21 +30,6 @@ import androidx.compose.ui.window.application
 
 data class Contact(val name: String, val imageName: String)
 
-val contacts = mutableStateListOf(
-    Contact("Nazi", "venom.jpg"),
-    Contact("Feri", "flower.jpg"),
-    Contact("Ati", "venom.jpg"),
-    Contact("Mamad", "venom.jpg"),
-    Contact("BTa", "flower.jpg"),
-    Contact("Feri2", "flower.jpg"),
-    Contact("Feri3", "flower.jpg"),
-    Contact("Feri4", "flower.jpg"),
-    Contact("Feri5", "flower.jpg"),
-    Contact("Ati2", "venom.jpg"),
-    Contact("Mamad2", "venom.jpg"),
-    Contact("BTa2", "flower.jpg"),
-)
-
 @ExperimentalUnitApi
 fun main() = application {
     Window(
@@ -53,6 +38,23 @@ fun main() = application {
     ) {
         MaterialTheme {
             Row {
+                val contacts = remember {
+                    mutableStateListOf(
+                        Contact("Nazi", "venom.jpg"),
+                        Contact("Feri", "flower.jpg"),
+                        Contact("Ati", "venom.jpg"),
+                        Contact("Mamad", "venom.jpg"),
+                        Contact("BTa", "flower.jpg"),
+                        Contact("Feri2", "flower.jpg"),
+                        Contact("Feri3", "flower.jpg"),
+                        Contact("Feri4", "flower.jpg"),
+                        Contact("Feri5", "flower.jpg"),
+                        Contact("Ati2", "venom.jpg"),
+                        Contact("Mamad2", "venom.jpg"),
+                        Contact("BTa2", "flower.jpg"),
+                    )
+                }
+
                 val nameState = remember { mutableStateOf("") }
                 val clickedIndex = remember { mutableStateOf(0) }
 
@@ -67,6 +69,9 @@ fun main() = application {
                             onContactClick = {
                                 nameState.value = contact.name
                                 clickedIndex.value = contacts.indexOf(contact)
+                            },
+                            onDeleteClick = {
+                                contacts.remove(contact)
                             })
                     }
                 }
@@ -113,7 +118,7 @@ fun main() = application {
 }
 
 @Composable
-fun ContactItem(contact: Contact, onContactClick: () -> Unit) {
+fun ContactItem(contact: Contact, onContactClick: () -> Unit, onDeleteClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -139,7 +144,7 @@ fun ContactItem(contact: Contact, onContactClick: () -> Unit) {
             modifier = Modifier.weight(1f)
         )
         IconButton(onClick = {
-            contacts.remove(contact)
+            onDeleteClick()
         }) {
             Icon(
                 imageVector = Icons.Default.Delete,
