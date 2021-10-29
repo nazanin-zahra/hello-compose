@@ -1,4 +1,5 @@
-import androidx.compose.desktop.Window
+package contacts
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,12 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 
 data class Contact(val name: String, val imageName: String)
 
@@ -36,8 +38,12 @@ val contacts = listOf(
 )
 
 @ExperimentalUnitApi
-fun main() = Window(title = "Contacts") {
-    MaterialTheme {
+fun main() = application {
+    Window(
+        title = "Contacts",
+        onCloseRequest = { exitApplication() }
+    ) {
+        MaterialTheme {
 /*
         Column {
             contacts.forEach { contact ->
@@ -47,16 +53,16 @@ fun main() = Window(title = "Contacts") {
         if you write it like this you wont be able to see other contacts whicj are not in the screen
 */
 
-        LazyColumn {
-            items(contacts) { contact ->
-                ContactItem(contact.name, contact.imageName)
+            LazyColumn {
+                items(contacts) { contact ->
+                    ContactItem(contact.name, contact.imageName)
+                }
             }
         }
+        //item () is itorator of list
     }
-    //item () is itorator of list
 }
 
-@ExperimentalUnitApi
 @Composable
 fun ContactItem(name: String, imageName: String) {
     Row(
@@ -67,7 +73,7 @@ fun ContactItem(name: String, imageName: String) {
 
     ) {
         Image(
-            bitmap = imageResource(imageName),
+            painter = painterResource(imageName),
             contentDescription = "This image contains some flower.",
             modifier = Modifier
                 .clip(CircleShape)
@@ -78,7 +84,7 @@ fun ContactItem(name: String, imageName: String) {
 
         Text(
             text = name,
-            fontSize = TextUnit(24f, TextUnitType.Sp),
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
     }

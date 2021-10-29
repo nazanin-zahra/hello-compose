@@ -1,4 +1,3 @@
-import androidx.compose.desktop.Window
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,12 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import java.util.*
 
 class Call(
@@ -47,25 +46,24 @@ val callLog = mutableListOf(
     Call(Date(2021, 11, 12), "09112345678", Type.Out, "venom.jpg", "kok"),
 )
 
-@ExperimentalUnitApi
-fun main() = Window(title = "calls") {
-    MaterialTheme {
-        LazyColumn {
-            items(callLog) { call: Call ->
-                CallRow(call)
+fun main() = application {
+    Window(title = "calls",
+        onCloseRequest = {}) {
+        MaterialTheme {
+            LazyColumn {
+                items(callLog) { call: Call ->
+                    CallRow(call)
+                }
             }
         }
     }
-
-
 }
 
-@ExperimentalUnitApi
 @Composable
 fun CallRow(call: Call) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
-            bitmap = imageResource(call.imageResource),
+            painter = painterResource(call.imageResource),
             contentDescription = null,
             modifier = Modifier
                 .size(70.dp)
@@ -76,19 +74,19 @@ fun CallRow(call: Call) {
         Column {
             Text(
                 call.name,
-                fontSize = TextUnit(20f, TextUnitType.Sp),
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
             )
             Row {
                 Text(
                     call.phoneNumber,
-                    fontSize = TextUnit(15f, TextUnitType.Sp),
+                    fontSize = 15.sp,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     call.createdAt.toString().substring(0, 10),
                     fontWeight = FontWeight.Thin,
-                    fontSize = TextUnit(12f, TextUnitType.Sp)
+                    fontSize = 12.sp
                 )
             }
         }
