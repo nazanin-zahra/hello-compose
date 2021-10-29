@@ -7,6 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +32,7 @@ enum class Type {
     Out
 }
 
-val callLog = mutableListOf(
+val callLog = mutableStateListOf(
     Call(Date(2021, 11, 9), "09121231231", Type.In, "venom.jpg", "farhad"),
     Call(Date(2021, 11, 9), "09363456789", Type.Out, "venom.jpg", "nazanin"),
     Call(Date(2021, 11, 10), "09112345678", Type.Out, "flower.jpg", "feri"),
@@ -93,10 +94,12 @@ fun CallRow(call: Call) {
 
         Spacer(Modifier.width(8.dp))
 
-        Button(onClick = {
-      //      remember { mutableListOf( callLog.remove(call))}
-        }) {
-       Text("Delete")
-        }
+        Button(
+            onClick = {
+                callLog.remove(call)
+            },
+            content = {
+                Text("Delete")
+            })
     }
 }
