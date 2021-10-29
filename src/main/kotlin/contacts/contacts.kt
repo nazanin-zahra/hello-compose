@@ -8,14 +8,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,12 +64,34 @@ fun main() = application {
                     }
                 }
 
-                Box(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .weight(0.6f)
                         .fillMaxHeight()
                 ) {
-
+                    Spacer(modifier = Modifier.height(36.dp))
+                    val nameState = remember { mutableStateOf("") }
+                    OutlinedTextField(
+                        value = nameState.value,
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 20)
+                                nameState.value = newValue
+                        },
+                        label = {
+                            Text("Name")
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                nameState.value = ""
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -87,7 +109,7 @@ fun ContactItem(contact: Contact) {
             .fillMaxWidth()
     ) {
         Image(
-            painter = painterResource( contact.imageName),
+            painter = painterResource(contact.imageName),
             contentDescription = "This image contains some flower.",
             modifier = Modifier
                 .clip(CircleShape)
