@@ -54,6 +54,7 @@ fun main() = application {
         MaterialTheme {
             Row {
                 val nameState = remember { mutableStateOf("") }
+                val clickedIndex = remember { mutableStateOf(0) }
 
                 LazyColumn(
                     modifier = Modifier
@@ -65,6 +66,7 @@ fun main() = application {
                         ContactItem(contact,
                             onContactClick = {
                                 nameState.value = contact.name
+                                clickedIndex.value = contacts.indexOf(contact)
                             })
                     }
                 }
@@ -96,6 +98,14 @@ fun main() = application {
                             }
                         }
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = {
+                        val clickedItem = contacts[clickedIndex.value]
+                        val newItem = clickedItem.copy(name = nameState.value)
+                        contacts[clickedIndex.value] = newItem
+                    }) {
+                        Text("Save")
+                    }
                 }
             }
         }
