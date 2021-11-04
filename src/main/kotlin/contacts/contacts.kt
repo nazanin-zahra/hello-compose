@@ -103,7 +103,8 @@ fun main() = application {
                                     contentDescription = null
                                 )
                             }
-                        }
+                        },
+                        singleLine = true
                     )
 
                     OutlinedTextField(
@@ -122,7 +123,8 @@ fun main() = application {
                                     contentDescription = null
                                 )
                             }
-                        }
+                        },
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
