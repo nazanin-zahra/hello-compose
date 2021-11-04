@@ -94,8 +94,7 @@ fun main() = application {
                 ) {
                     Spacer(modifier = Modifier.height(36.dp))
 
-                    val clickedIndex: Int? = clickedIndexState.value
-                    if (clickedIndex == null) {
+                    if (clickedIndexState.value == null) {
                         Image(
                             imageVector = Icons.Default.Person,
                             contentDescription = null,
@@ -106,7 +105,7 @@ fun main() = application {
                         )
                     } else {
                         Image(
-                            painter = painterResource(contacts[clickedIndex].imageName),
+                            painter = painterResource(contacts[clickedIndexState.value!!].imageName),
                             contentDescription = "big avatar of selected user",
                             modifier = Modifier
                                 .size(100.dp)
@@ -171,17 +170,17 @@ fun main() = application {
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
-                        enabled = clickedIndex != null,
+                        enabled = clickedIndexState.value != null,
                         onClick = {
                             if (phoneState.value == "")
                                 phoneHasErrorState.value = true
-                            else if (clickedIndex != null) {
-                                val clickedItem = contacts[clickedIndex]
+                            else if (clickedIndexState.value != null) {
+                                val clickedItem = contacts[clickedIndexState.value!!]
                                 val newItem = clickedItem.copy(
                                     name = nameState.value,
                                     phoneNumber = phoneState.value
                                 )
-                                contacts[clickedIndex] = newItem
+                                contacts[clickedIndexState.value!!] = newItem
                             }
                         }
                     ) {
