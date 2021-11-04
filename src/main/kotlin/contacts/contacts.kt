@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
-data class Contact(val name: String, val imageName: String)
+data class Contact(val name: String, val phoneNumber: String, val imageName: String)
 
 @ExperimentalUnitApi
 fun main() = application {
@@ -40,18 +40,18 @@ fun main() = application {
             Row {
                 val contacts = remember {
                     mutableStateListOf(
-                        Contact("Nazi", "venom.jpg"),
-                        Contact("Feri", "flower.jpg"),
-                        Contact("Ati", "venom.jpg"),
-                        Contact("Mamad", "venom.jpg"),
-                        Contact("BTa", "flower.jpg"),
-                        Contact("Feri2", "flower.jpg"),
-                        Contact("Feri3", "flower.jpg"),
-                        Contact("Feri4", "flower.jpg"),
-                        Contact("Feri5", "flower.jpg"),
-                        Contact("Ati2", "venom.jpg"),
-                        Contact("Mamad2", "venom.jpg"),
-                        Contact("BTa2", "flower.jpg"),
+                        Contact("Nazi", "+1123456", "venom.jpg"),
+                        Contact("Feri", "+8765431123456", "flower.jpg"),
+                        Contact("Ati", "+2309487238", "venom.jpg"),
+                        Contact("Mamad", "+348973287", "venom.jpg"),
+                        Contact("BTa", "+50968453", "flower.jpg"),
+                        Contact("Feri2", "+938743242", "flower.jpg"),
+                        Contact("Feri3", "+34823798379", "flower.jpg"),
+                        Contact("Feri4", "+3489327", "flower.jpg"),
+                        Contact("Feri5", "+96785842", "flower.jpg"),
+                        Contact("Ati2", "+32498732", "venom.jpg"),
+                        Contact("Mamad2", "+12342432", "venom.jpg"),
+                        Contact("BTa2", "+021437826", "flower.jpg"),
                     )
                 }
 
@@ -137,12 +137,21 @@ fun ContactItem(contact: Contact, onContactClick: () -> Unit, onDeleteClick: () 
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Text(
-            text = contact.name,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f)
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = contact.name,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = contact.phoneNumber,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+            )
+        }
         IconButton(onClick = {
             onDeleteClick()
         }) {
