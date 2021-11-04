@@ -165,18 +165,21 @@ fun main() = application {
 
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = {
-                        if (phoneState.value == "")
-                            phoneHasErrorState.value = true
-                        else if (clickedIndex != null) {
-                            val clickedItem = contacts[clickedIndex]
-                            val newItem = clickedItem.copy(
-                                name = nameState.value,
-                                phoneNumber = phoneState.value
-                            )
-                            contacts[clickedIndex] = newItem
+                    Button(
+                        enabled = clickedIndex != null,
+                        onClick = {
+                            if (phoneState.value == "")
+                                phoneHasErrorState.value = true
+                            else if (clickedIndex != null) {
+                                val clickedItem = contacts[clickedIndex]
+                                val newItem = clickedItem.copy(
+                                    name = nameState.value,
+                                    phoneNumber = phoneState.value
+                                )
+                                contacts[clickedIndex] = newItem
+                            }
                         }
-                    }) {
+                    ) {
                         Text("Save")
                     }
                 }
