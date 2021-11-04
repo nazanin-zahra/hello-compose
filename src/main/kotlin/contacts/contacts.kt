@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,7 +59,7 @@ fun main() = application {
                 val nameState = remember { mutableStateOf("") }
                 val phoneState = remember { mutableStateOf("") }
                 val phoneHasErrorState = remember { mutableStateOf(false) }
-                val clickedIndexState = remember { mutableStateOf<Int>(0) }
+                val clickedIndexState = remember { mutableStateOf<Int?>(null) }
 
                 LazyColumn(
                     modifier = Modifier
@@ -87,6 +88,27 @@ fun main() = application {
                         .fillMaxHeight()
                 ) {
                     Spacer(modifier = Modifier.height(36.dp))
+
+                    val clickedIndex: Int? = clickedIndexState.value
+                    if (clickedIndex == null) {
+                        Image(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                                .background(Color.LightGray)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(contacts[clickedIndex].imageName),
+                            contentDescription = "big avatar of selected user",
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+
                     OutlinedTextField(
                         value = nameState.value,
                         onValueChange = { newValue ->
@@ -146,13 +168,13 @@ fun main() = application {
                     Button(onClick = {
                         if (phoneState.value == "")
                             phoneHasErrorState.value = true
-                        else {
-                            val clickedItem = contacts[clickedIndexState.value]
+                        else if (clickedIndex != null) {
+                            val clickedItem = contacts[clickedIndex]
                             val newItem = clickedItem.copy(
                                 name = nameState.value,
                                 phoneNumber = phoneState.value
                             )
-                            contacts[clickedIndexState.value] = newItem
+                            contacts[clickedIndex] = newItem
                         }
                     }) {
                         Text("Save")
