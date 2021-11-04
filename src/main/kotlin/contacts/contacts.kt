@@ -56,6 +56,7 @@ fun main() = application {
                 }
 
                 val nameState = remember { mutableStateOf("") }
+                val phoneState = remember { mutableStateOf("") }
                 val clickedIndex = remember { mutableStateOf(0) }
 
                 LazyColumn(
@@ -68,6 +69,7 @@ fun main() = application {
                         ContactItem(contact,
                             onContactClick = {
                                 nameState.value = contact.name
+                                phoneState.value = contact.phoneNumber
                                 clickedIndex.value = contacts.indexOf(contact)
                             },
                             onDeleteClick = {
@@ -103,10 +105,33 @@ fun main() = application {
                             }
                         }
                     )
+
+                    OutlinedTextField(
+                        value = phoneState.value,
+                        onValueChange = { enteredValue ->
+                            val newValue = enteredValue.filter { it.isDigit() || it == '+' }
+                            phoneState.value = newValue
+                        },
+                        label = {
+                            Text("PhoneNumber")
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = { phoneState.value = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = {
                         val clickedItem = contacts[clickedIndex.value]
-                        val newItem = clickedItem.copy(name = nameState.value)
+                        val newItem = clickedItem.copy(
+                            name = nameState.value,
+                            phoneNumber = phoneState.value
+                        )
                         contacts[clickedIndex.value] = newItem
                     }) {
                         Text("Save")
