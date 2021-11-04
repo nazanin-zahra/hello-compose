@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -67,8 +69,11 @@ fun main() = application {
                         .background(color = Color.LightGray)
                         .fillMaxHeight()
                 ) {
-                    items(contacts) { contact ->
-                        ContactItem(contact,
+                    itemsIndexed(contacts) { index, contact ->
+                        val thisItemIsSelected: Boolean = clickedIndexState.value == index
+                        ContactItem(
+                            contact = contact,
+                            isSelected = thisItemIsSelected,
                             onContactClick = {
                                 nameState.value = contact.name
                                 phoneState.value = contact.phoneNumber
@@ -189,14 +194,22 @@ fun main() = application {
 }
 
 @Composable
-fun ContactItem(contact: Contact, onContactClick: () -> Unit, onDeleteClick: () -> Unit) {
+fun ContactItem(contact: Contact, isSelected: Boolean, onContactClick: () -> Unit, onDeleteClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onContactClick() }
-            .padding(8.dp)
-            .fillMaxWidth()
+        modifier = if (isSelected)
+            Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.Gray)
+                .clickable { onContactClick() }
+                .padding(8.dp)
+                .fillMaxWidth()
+        else
+            Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onContactClick() }
+                .padding(8.dp)
+                .fillMaxWidth()
     ) {
         Image(
             painter = painterResource(contact.imageName),
