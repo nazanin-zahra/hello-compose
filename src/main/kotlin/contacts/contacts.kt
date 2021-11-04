@@ -58,7 +58,7 @@ fun main() = application {
                 val nameState = remember { mutableStateOf("") }
                 val phoneState = remember { mutableStateOf("") }
                 val phoneHasErrorState = remember { mutableStateOf(false) }
-                val clickedIndex = remember { mutableStateOf(0) }
+                val clickedIndexState = remember { mutableStateOf<Int>(0) }
 
                 LazyColumn(
                     modifier = Modifier
@@ -71,7 +71,7 @@ fun main() = application {
                             onContactClick = {
                                 nameState.value = contact.name
                                 phoneState.value = contact.phoneNumber
-                                clickedIndex.value = contacts.indexOf(contact)
+                                clickedIndexState.value = contacts.indexOf(contact)
                                 phoneHasErrorState.value = false
                             },
                             onDeleteClick = {
@@ -147,12 +147,12 @@ fun main() = application {
                         if (phoneState.value == "")
                             phoneHasErrorState.value = true
                         else {
-                            val clickedItem = contacts[clickedIndex.value]
+                            val clickedItem = contacts[clickedIndexState.value]
                             val newItem = clickedItem.copy(
                                 name = nameState.value,
                                 phoneNumber = phoneState.value
                             )
-                            contacts[clickedIndex.value] = newItem
+                            contacts[clickedIndexState.value] = newItem
                         }
                     }) {
                         Text("Save")
