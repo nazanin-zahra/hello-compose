@@ -57,6 +57,7 @@ fun main() = application {
 
                 val nameState = remember { mutableStateOf("") }
                 val phoneState = remember { mutableStateOf("") }
+                val phoneHasErrorState = remember { mutableStateOf(false) }
                 val clickedIndex = remember { mutableStateOf(0) }
 
                 LazyColumn(
@@ -71,6 +72,7 @@ fun main() = application {
                                 nameState.value = contact.name
                                 phoneState.value = contact.phoneNumber
                                 clickedIndex.value = contacts.indexOf(contact)
+                                phoneHasErrorState.value = false
                             },
                             onDeleteClick = {
                                 contacts.remove(contact)
@@ -107,34 +109,51 @@ fun main() = application {
                         singleLine = true
                     )
 
-                    OutlinedTextField(
-                        value = phoneState.value,
-                        onValueChange = { enteredValue ->
-                            val newValue = enteredValue.filter { it.isDigit() || it == '+' }
-                            phoneState.value = newValue
-                        },
-                        label = {
-                            Text("PhoneNumber")
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = { phoneState.value = "" }) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        singleLine = true
-                    )
+                    Column {
+                        OutlinedTextField(
+                            value = phoneState.value,
+                            onValueChange = { enteredValue ->
+                                val newValue = enteredValue.filter { it.isDigit() || it == '+' }
+                                phoneState.value = newValue
+                            },
+                            label = {
+                                Text("PhoneNumber")
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = { phoneState.value = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            singleLine = true,
+                            isError = phoneHasErrorState.value,
+                            placeholder = { Text("Enter phone") }
+                        )
+                        if (phoneHasErrorState.value) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Phone is empty.",
+                                color = MaterialTheme.colors.error,
+                                style = MaterialTheme.typography.caption,
+                            )
+                        }
+                    }
+
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = {
-                        val clickedItem = contacts[clickedIndex.value]
-                        val newItem = clickedItem.copy(
-                            name = nameState.value,
-                            phoneNumber = phoneState.value
-                        )
-                        contacts[clickedIndex.value] = newItem
+                        if (phoneState.value == "")
+                            phoneHasErrorState.value = true
+                        else {
+                            val clickedItem = contacts[clickedIndex.value]
+                            val newItem = clickedItem.copy(
+                                name = nameState.value,
+                                phoneNumber = phoneState.value
+                            )
+                            contacts[clickedIndex.value] = newItem
+                        }
                     }) {
                         Text("Save")
                     }
