@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -62,7 +60,8 @@ fun main() = application {
                 val phoneState = remember { mutableStateOf("") }
                 val phoneHasErrorState = remember { mutableStateOf(false) }
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
-
+                val nameHasErrorState= remember { mutableStateOf(false) }
+                 val nameHasEroorStateChar= remember { mutableStateOf(false) }
                 LazyColumn(
                     modifier = Modifier
                         .weight(0.4f)
@@ -79,6 +78,8 @@ fun main() = application {
                                 phoneState.value = contact.phoneNumber
                                 clickedIndexState.value = contacts.indexOf(contact)
                                 phoneHasErrorState.value = false
+                                nameHasErrorState.value=false
+                                nameHasEroorStateChar.value=false
                             },
                             onDeleteClick = {
                                 contacts.remove(contact)
@@ -112,7 +113,7 @@ fun main() = application {
                                 .clip(CircleShape)
                         )
                     }
-
+                    Column {
                     OutlinedTextField(
                         value = nameState.value,
                         onValueChange = { newValue ->
@@ -132,9 +133,26 @@ fun main() = application {
                                 )
                             }
                         },
-                        singleLine = true
+                        singleLine = true,
+                        isError = nameHasErrorState.value
                     )
-
+                    if (nameHasErrorState.value) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "name is emty",
+                            color = MaterialTheme.colors.error,
+                            style = MaterialTheme.typography.caption,
+                        )
+                    }
+                        else if (nameHasEroorStateChar.value){
+                            Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "the characters are not enough.",
+                            color = MaterialTheme.colors.error,
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
+                }
                     Column {
                         OutlinedTextField(
                             value = phoneState.value,
@@ -174,6 +192,10 @@ fun main() = application {
                         onClick = {
                             if (phoneState.value == "")
                                 phoneHasErrorState.value = true
+                            else if ( nameState.value.length<3 && nameState.value!="")
+                                nameHasEroorStateChar.value=true
+                            else if (nameState.value=="")
+                                nameHasErrorState.value=true
                             else if (clickedIndexState.value != null) {
                                 val clickedItem = contacts[clickedIndexState.value!!]
                                 val newItem = clickedItem.copy(
