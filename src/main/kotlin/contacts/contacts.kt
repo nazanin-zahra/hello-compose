@@ -60,8 +60,8 @@ fun main() = application {
                 val phoneState = remember { mutableStateOf("") }
                 val phoneHasErrorState = remember { mutableStateOf(false) }
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
-                val nameHasErrorState= remember { mutableStateOf(false) }
-                 val nameHasEroorStateChar= remember { mutableStateOf(false) }
+                val nameHasErrorState = remember { mutableStateOf(false) }
+                val nameHasEroorStateChar = remember { mutableStateOf(false) }
                 LazyColumn(
                     modifier = Modifier
                         .weight(0.4f)
@@ -78,8 +78,8 @@ fun main() = application {
                                 phoneState.value = contact.phoneNumber
                                 clickedIndexState.value = contacts.indexOf(contact)
                                 phoneHasErrorState.value = false
-                                nameHasErrorState.value=false
-                                nameHasEroorStateChar.value=false
+                                nameHasErrorState.value = false
+                                nameHasEroorStateChar.value = false
                             },
                             onDeleteClick = {
                                 contacts.remove(contact)
@@ -114,45 +114,44 @@ fun main() = application {
                         )
                     }
                     Column {
-                    OutlinedTextField(
-                        value = nameState.value,
-                        onValueChange = { newValue ->
-                            if (newValue.length <= 20)
-                                nameState.value = newValue
-                        },
-                        label = {
-                            Text("Name")
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                nameState.value = ""
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        singleLine = true,
-                        isError = nameHasErrorState.value
-                    )
-                    if (nameHasErrorState.value) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "name is emty",
-                            color = MaterialTheme.colors.error,
-                            style = MaterialTheme.typography.caption,
+                        OutlinedTextField(
+                            value = nameState.value,
+                            onValueChange = { newValue ->
+                                if (newValue.length <= 20)
+                                    nameState.value = newValue
+                            },
+                            label = {
+                                Text("Name")
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = {
+                                    nameState.value = ""
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            singleLine = true,
+                            isError = nameHasErrorState.value
                         )
-                    }
-                        else if (nameHasEroorStateChar.value){
+                        if (nameHasErrorState.value) {
                             Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "the characters are not enough.",
-                            color = MaterialTheme.colors.error,
-                            style = MaterialTheme.typography.caption
-                        )
+                            Text(
+                                text = "name is emty",
+                                color = MaterialTheme.colors.error,
+                                style = MaterialTheme.typography.caption,
+                            )
+                        } else if (nameHasEroorStateChar.value) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "the characters are not enough.",
+                                color = MaterialTheme.colors.error,
+                                style = MaterialTheme.typography.caption
+                            )
+                        }
                     }
-                }
                     Column {
                         OutlinedTextField(
                             value = phoneState.value,
@@ -192,10 +191,10 @@ fun main() = application {
                         onClick = {
                             if (phoneState.value == "")
                                 phoneHasErrorState.value = true
-                            else if ( nameState.value.length<3 && nameState.value!="")
-                                nameHasEroorStateChar.value=true
-                            else if (nameState.value=="")
-                                nameHasErrorState.value=true
+                            else if (nameState.value.length < 3 && nameState.value != "")
+                                nameHasEroorStateChar.value = true
+                            else if (nameState.value == "")
+                                nameHasErrorState.value = true
                             else if (clickedIndexState.value != null) {
                                 val clickedItem = contacts[clickedIndexState.value!!]
                                 val newItem = clickedItem.copy(
