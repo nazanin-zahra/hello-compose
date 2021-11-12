@@ -61,7 +61,7 @@ fun main() = application {
                 val phoneHasErrorState = remember { mutableStateOf(false) }
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
                 val nameHasErrorState = remember { mutableStateOf(false) }
-                val nameHasEroorStateChar = remember { mutableStateOf(false) }
+                val nameHasErrorStateChar = remember { mutableStateOf(false) }
                 val emailState = remember { mutableStateOf<String?>(null) }
                 LazyColumn(
                     modifier = Modifier
@@ -80,7 +80,7 @@ fun main() = application {
                                 clickedIndexState.value = contacts.indexOf(contact)
                                 phoneHasErrorState.value = false
                                 nameHasErrorState.value = false
-                                nameHasEroorStateChar.value = false
+                                nameHasErrorStateChar.value = false
                                 emailState.value = contact.email
                             },
                             onDeleteClick = {
@@ -145,7 +145,7 @@ fun main() = application {
                                 color = MaterialTheme.colors.error,
                                 style = MaterialTheme.typography.caption,
                             )
-                        } else if (nameHasEroorStateChar.value) {
+                        } else if (nameHasErrorStateChar.value) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = "the characters are not enough.",
@@ -216,7 +216,7 @@ fun main() = application {
                             if (phoneState.value == "")
                                 phoneHasErrorState.value = true
                             else if (nameState.value.length < 3 && nameState.value != "")
-                                nameHasEroorStateChar.value = true
+                                nameHasErrorStateChar.value = true
                             else if (nameState.value == "")
                                 nameHasErrorState.value = true
                             else if (clickedIndexState.value != null) {
@@ -227,6 +227,9 @@ fun main() = application {
                                     email = emailState.value
                                 )
                                 contacts[clickedIndexState.value!!] = newItem
+                                phoneHasErrorState.value = false
+                                nameHasErrorStateChar.value = false
+                                nameHasErrorState.value = false
                             }
                         }
                     ) {
