@@ -60,8 +60,7 @@ fun main() = application {
                 val phoneState = remember { mutableStateOf("") }
                 val phoneHasErrorState = remember { mutableStateOf(false) }
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
-                val nameHasErrorState = remember { mutableStateOf(false) }
-                val nameHasErrorStateChar = remember { mutableStateOf(false) }
+                val nameErrorState = remember { mutableStateOf<String?>(null) }
                 val emailState = remember { mutableStateOf<String?>(null) }
                 LazyColumn(
                     modifier = Modifier
@@ -79,8 +78,7 @@ fun main() = application {
                                 phoneState.value = contact.phoneNumber
                                 clickedIndexState.value = contacts.indexOf(contact)
                                 phoneHasErrorState.value = false
-                                nameHasErrorState.value = false
-                                nameHasErrorStateChar.value = false
+                                nameErrorState.value = null
                                 emailState.value = contact.email
                             },
                             onDeleteClick = {
@@ -136,24 +134,18 @@ fun main() = application {
                                 }
                             },
                             singleLine = true,
-                            isError = nameHasErrorState.value
+                            isError = nameErrorState.value != null
                         )
-                        if (nameHasErrorState.value) {
+                        if (nameErrorState.value != null) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "name is emty",
+                                text = nameErrorState.value!!,
                                 color = MaterialTheme.colors.error,
                                 style = MaterialTheme.typography.caption,
                             )
-                        } else if (nameHasErrorStateChar.value) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "the characters are not enough.",
-                                color = MaterialTheme.colors.error,
-                                style = MaterialTheme.typography.caption
-                            )
                         }
                     }
+
                     Column {
                         OutlinedTextField(
                             value = phoneState.value,
@@ -213,13 +205,19 @@ fun main() = application {
                     Button(
                         enabled = clickedIndexState.value != null,
                         onClick = {
-                            if (phoneState.value == "")
-                                phoneHasErrorState.value = true
-                            else if (nameState.value.length < 3 && nameState.value != "")
-                                nameHasErrorStateChar.value = true
-                            else if (nameState.value == "")
-                                nameHasErrorState.value = true
-                            else if (clickedIndexState.value != null) {
+                            if (nameState.value == "")
+                                nameErrorState.value = "name is empty"
+                            else if (nameState.value.length < 3)
+                                nameErrorState.value = "the characters are not enough"
+                            else
+                                nameErrorState.value = null
+
+                            phoneHasErrorState.value = phoneState.value == ""
+
+                            if (clickedIndexState.value != null
+                                && nameErrorState.value == null
+                                && phoneHasErrorState.value.not()
+                            ) {
                                 val clickedItem = contacts[clickedIndexState.value!!]
                                 val newItem = clickedItem.copy(
                                     name = nameState.value,
@@ -227,9 +225,6 @@ fun main() = application {
                                     email = emailState.value
                                 )
                                 contacts[clickedIndexState.value!!] = newItem
-                                phoneHasErrorState.value = false
-                                nameHasErrorStateChar.value = false
-                                nameHasErrorState.value = false
                             }
                         }
                     ) {
