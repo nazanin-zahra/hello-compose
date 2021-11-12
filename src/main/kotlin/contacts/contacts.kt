@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
-data class Contact(val name: String, val phoneNumber: String, val imageName: String)
+data class Contact(val name: String, val phoneNumber: String, val imageName: String, val email: String? = null)
 
 @ExperimentalUnitApi
 fun main() = application {
@@ -41,8 +41,8 @@ fun main() = application {
             Row {
                 val contacts = remember {
                     mutableStateListOf(
-                        Contact("Nazi", "+1123456", "venom.jpg"),
-                        Contact("Feri", "+8765431123456", "flower.jpg"),
+                        Contact("Nazi", "+1123456", "venom.jpg", null),
+                        Contact("Feri", "+8765431123456", "flower.jpg", "n.b@gmail.com"),
                         Contact("Ati", "+2309487238", "venom.jpg"),
                         Contact("Mamad", "+348973287", "venom.jpg"),
                         Contact("BTa", "+50968453", "flower.jpg"),
@@ -51,7 +51,7 @@ fun main() = application {
                         Contact("Feri4", "+3489327", "flower.jpg"),
                         Contact("Feri5", "+96785842", "flower.jpg"),
                         Contact("Ati2", "+32498732", "venom.jpg"),
-                        Contact("Mamad2", "+12342432", "venom.jpg"),
+                        Contact("Mamad2", "+12342432", "venom.jpg", "m@gmail.com"),
                         Contact("BTa2", "+021437826", "flower.jpg"),
                     )
                 }
@@ -62,6 +62,7 @@ fun main() = application {
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
                 val nameHasErrorState = remember { mutableStateOf(false) }
                 val nameHasEroorStateChar = remember { mutableStateOf(false) }
+                val emailState = remember { mutableStateOf<String?>(null) }
                 LazyColumn(
                     modifier = Modifier
                         .weight(0.4f)
@@ -80,6 +81,7 @@ fun main() = application {
                                 phoneHasErrorState.value = false
                                 nameHasErrorState.value = false
                                 nameHasEroorStateChar.value = false
+                                emailState.value = contact.email
                             },
                             onDeleteClick = {
                                 contacts.remove(contact)
@@ -182,6 +184,28 @@ fun main() = application {
                                 style = MaterialTheme.typography.caption,
                             )
                         }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = emailState.value ?: "",
+                            onValueChange = {
+                                emailState.value = it
+                            },
+                            placeholder = { Text("Enter email") },
+                            label = {
+                                Text("Email")
+
+                            },
+                            trailingIcon = {
+                                IconButton(
+                                    onClick = { emailState.value = "" },
+                                    enabled = emailState.value.isNullOrBlank().not()
+                                ) {
+                                    Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+
+                                }
+                            }
+                        )
+
                     }
 
 
@@ -199,7 +223,8 @@ fun main() = application {
                                 val clickedItem = contacts[clickedIndexState.value!!]
                                 val newItem = clickedItem.copy(
                                     name = nameState.value,
-                                    phoneNumber = phoneState.value
+                                    phoneNumber = phoneState.value,
+                                    email = emailState.value
                                 )
                                 contacts[clickedIndexState.value!!] = newItem
                             }
