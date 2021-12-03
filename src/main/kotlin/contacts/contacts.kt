@@ -238,6 +238,13 @@ fun main() = application {
                                     email = emailState.value
                                 )
                                 contacts[clickedIndexState.value!!] = newItem
+                                statement.executeUpdate(
+                                    "UPDATE ContactTable SET " +
+                                        "ContactName='${newItem.name}', " +
+                                        "Email='${newItem.email}', " +
+                                        "Phone='${newItem.phoneNumber}' " +
+                                        "WHERE ContactName='${clickedItem.name}'"
+                                )
                             }
                         }
                     ) {
