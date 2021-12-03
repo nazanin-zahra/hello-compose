@@ -32,7 +32,13 @@ import java.io.File
 import java.sql.DriverManager
 import java.sql.ResultSet
 
-data class Contact(val name: String, val phoneNumber: String, val imageName: String, val email: String? = null)
+data class Contact(
+    val id: Int,
+    val name: String,
+    val phoneNumber: String,
+    val imageName: String,
+    val email: String? = null
+)
 
 @ExperimentalUnitApi
 fun main() = application {
@@ -50,6 +56,7 @@ fun main() = application {
                     val list = mutableStateListOf<Contact>()
 
                     while (result.next()) {
+                        val id = result.getInt("ContactId")
                         val name = result.getString("ContactName")
                         val phone = result.getString("Phone")
                         val email = result.getString("Email")
@@ -57,6 +64,7 @@ fun main() = application {
 
                         list.add(
                             Contact(
+                                id = id,
                                 name = name,
                                 phoneNumber = phone,
                                 imageName = avatar,
@@ -94,7 +102,7 @@ fun main() = application {
                                 emailState.value = contact.email
                             },
                             onDeleteClick = {
-                                statement.executeUpdate("DELETE FROM ContactTable WHERE ContactName='${contact.name}'")
+                                statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
                                 contacts.remove(contact)
                             })
                     }
@@ -243,7 +251,7 @@ fun main() = application {
                                         "ContactName='${newItem.name}', " +
                                         "Email='${newItem.email}', " +
                                         "Phone='${newItem.phoneNumber}' " +
-                                        "WHERE ContactName='${clickedItem.name}'"
+                                        "WHERE ContactId='${clickedItem.id}'"
                                 )
                             }
                         }
