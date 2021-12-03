@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0-alpha4-build362"
+    id("org.jetbrains.compose") version "1.0.0"
 }
 
 group = "me.sisters"
@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("androidx.compose.material:material:1.0.0-alpha4-build362")
 }
 
 tasks.withType<KotlinCompile>() {
