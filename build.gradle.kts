@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
 }
 
 tasks.withType<KotlinCompile>() {

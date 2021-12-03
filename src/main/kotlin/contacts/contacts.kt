@@ -28,11 +28,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import java.io.File
+import java.sql.DriverManager
+import java.sql.ResultSet
 
 data class Contact(val name: String, val phoneNumber: String, val imageName: String, val email: String? = null)
 
 @ExperimentalUnitApi
 fun main() = application {
+    val connection = DriverManager.getConnection("jdbc:sqlite:src/main/kotlin/contacts/MyContacts.db")
+    val statement = connection.createStatement()
+    val result = statement.executeQuery("SELECT * FROM ContactTable")
+
     Window(
         title = "Contacts",
         onCloseRequest = { exitApplication() }
@@ -40,20 +47,25 @@ fun main() = application {
         MaterialTheme {
             Row {
                 val contacts = remember {
-                    mutableStateListOf(
-                        Contact("Nazi", "+1123456", "venom.jpg", null),
-                        Contact("Feri", "+8765431123456", "flower.jpg", "n.b@gmail.com"),
-                        Contact("Ati", "+2309487238", "venom.jpg"),
-                        Contact("Mamad", "+348973287", "venom.jpg"),
-                        Contact("BTa", "+50968453", "flower.jpg"),
-                        Contact("Feri2", "+938743242", "flower.jpg"),
-                        Contact("Feri3", "+34823798379", "flower.jpg"),
-                        Contact("Feri4", "+3489327", "flower.jpg"),
-                        Contact("Feri5", "+96785842", "flower.jpg"),
-                        Contact("Ati2", "+32498732", "venom.jpg"),
-                        Contact("Mamad2", "+12342432", "venom.jpg", "m@gmail.com"),
-                        Contact("BTa2", "+021437826", "flower.jpg"),
-                    )
+                    val list = mutableStateListOf<Contact>()
+
+                    while (result.next()) {
+                        val name = result.getString("ContactName")
+                        val phone = result.getString("Phone")
+                        val email = result.getString("Email")
+                        val avatar = result.getString("Avatar")
+
+                        list.add(
+                            Contact(
+                                name = name,
+                                phoneNumber = phone,
+                                imageName = avatar,
+                                email = email
+                            )
+                        )
+                    }
+
+                    list
                 }
 
                 val nameState = remember { mutableStateOf("") }
