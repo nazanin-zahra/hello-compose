@@ -94,6 +94,7 @@ fun main() = application {
                                 emailState.value = contact.email
                             },
                             onDeleteClick = {
+                                statement.executeUpdate("DELETE FROM ContactTable WHERE ContactName='${contact.name}'")
                                 contacts.remove(contact)
                             })
                     }
