@@ -234,6 +234,8 @@ fun main() = application {
                                 nameErrorState.value = null
 
                             phoneHasErrorState.value = phoneState.value == ""
+                            //==   if (phoneState.value == "")
+                           // phoneHasErrorState.value = true
 
                             if (clickedIndexState.value != null
                                 && nameErrorState.value == null
