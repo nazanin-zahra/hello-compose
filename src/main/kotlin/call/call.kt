@@ -1,16 +1,22 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +30,7 @@ class Call(
     val phoneNumber: String,
     val type: Type,
     val imageResource: String,
-    val name: String
+    val name: String,
 )
 
 enum class Type {
@@ -49,12 +55,22 @@ val callLog = mutableStateListOf(
 
 fun main() = application {
     Window(title = "calls",
-        onCloseRequest = {exitApplication()}) {
+        onCloseRequest = { exitApplication() }) {
         MaterialTheme {
-            LazyColumn {
-                items(callLog) { call ->
-                    CallRow(call)
+            Row {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .background(color = Color.LightGray)
+                ) {
+                    items(callLog) { call ->
+                        CallRow(call)
+                    }
                 }
+                Column (
+                    modifier = Modifier
+                        .weight(0.6f)
+                        ){  }
             }
         }
     }
@@ -62,7 +78,13 @@ fun main() = application {
 
 @Composable
 fun CallRow(call: Call) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { }
+            .fillMaxWidth()
+    ) {
         Image(
             painter = painterResource(call.imageResource),
             contentDescription = null,
@@ -72,7 +94,9 @@ fun CallRow(call: Call) {
                 .clip(CircleShape)
         )
 
-        Column {
+        Column (
+            modifier = Modifier
+                .weight(1f)){
             Text(
                 call.name,
                 fontSize = 20.sp,
@@ -94,12 +118,20 @@ fun CallRow(call: Call) {
 
         Spacer(Modifier.width(8.dp))
 
-        Button(
+        IconButton(
             onClick = {
                 callLog.remove(call)
-            },
-            content = {
-                Text("Delete")
-            })
+            }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null
+            )
+        }
     }
 }
+
+
+//  ّIcon(
+//imageVector = Icons.Default.Clear,
+// contentDescription ="",
+// )
