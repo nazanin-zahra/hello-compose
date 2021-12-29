@@ -49,10 +49,10 @@ val callLog = mutableStateListOf(
 
 fun main() = application {
     Window(title = "calls",
-        onCloseRequest = {}) {
+        onCloseRequest = {exitApplication()}) {
         MaterialTheme {
             LazyColumn {
-                items(callLog) { call: Call ->
+                items(callLog) { call ->
                     CallRow(call)
                 }
             }
