@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import java.awt.FileDialog
 import java.io.File
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -37,7 +39,7 @@ data class Contact(
     val name: String,
     val phoneNumber: String,
     val imageName: String,
-    val email: String? = null
+    val email: String? = null,
 )
 
 @ExperimentalUnitApi
@@ -82,6 +84,7 @@ fun main() = application {
                 val clickedIndexState = remember { mutableStateOf<Int?>(null) }
                 val nameErrorState = remember { mutableStateOf<String?>(null) }
                 val emailState = remember { mutableStateOf<String?>(null) }
+                val imageState = remember { mutableStateOf("") }
                 LazyColumn(
                     modifier = Modifier
                         .weight(0.4f)
@@ -100,6 +103,7 @@ fun main() = application {
                                 phoneHasErrorState.value = false
                                 nameErrorState.value = null
                                 emailState.value = contact.email
+                                imageState.value = contact.imageName
                             },
                             onDeleteClick = {
                                 statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
@@ -116,7 +120,7 @@ fun main() = application {
                 ) {
                     Spacer(modifier = Modifier.height(36.dp))
 
-                    if (clickedIndexState.value == null) {
+                    if (clickedIndexState.value == null || imageState.value.isEmpty()) {
                         Image(
                             imageVector = Icons.Default.Person,
                             contentDescription = null,
@@ -127,12 +131,19 @@ fun main() = application {
                         )
                     } else {
                         Image(
-                            painter = painterResource(contacts[clickedIndexState.value!!].imageName),
+                            painter = painterResource(imageState.value),
                             contentDescription = "big avatar of selected user",
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape)
                         )
+                    }
+                    Button(onClick = {
+                        imageState.value = ""
+                    }) {
+                        Text("Delete pic",
+                            fontWeight = FontWeight.Thin)
+
                     }
                     Column {
                         OutlinedTextField(
@@ -235,7 +246,7 @@ fun main() = application {
 
                             phoneHasErrorState.value = phoneState.value == ""
                             //==   if (phoneState.value == "")
-                           // phoneHasErrorState.value = true
+                            // phoneHasErrorState.value = true
 
                             if (clickedIndexState.value != null
                                 && nameErrorState.value == null
@@ -250,10 +261,10 @@ fun main() = application {
                                 contacts[clickedIndexState.value!!] = newItem
                                 statement.executeUpdate(
                                     "UPDATE ContactTable SET " +
-                                        "ContactName='${newItem.name}', " +
-                                        "Email='${newItem.email}', " +
-                                        "Phone='${newItem.phoneNumber}' " +
-                                        "WHERE ContactId='${clickedItem.id}'"
+                                            "ContactName='${newItem.name}', " +
+                                            "Email='${newItem.email}', " +
+                                            "Phone='${newItem.phoneNumber}' " +
+                                            "WHERE ContactId='${clickedItem.id}'"
                                 )
                             }
                         }
