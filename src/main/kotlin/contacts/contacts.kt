@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -130,19 +132,35 @@ fun main() = application {
                                 .background(Color.LightGray)
                         )
                     } else {
+                       // val painter=rememberImagePainter
                         Image(
-                            painter = painterResource(imageState.value),
+                            painter =BitmapPainter(ImageBitmap(100,100,),),
                             contentDescription = "big avatar of selected user",
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape)
                         )
                     }
-                    Button(onClick = {
-                        imageState.value = ""
-                    }) {
-                        Text("Delete pic",
-                            fontWeight = FontWeight.Thin)
+                    Row {
+                        Button(onClick = {
+                            imageState.value = ""
+                        }) {
+                            Text("Delete pic",
+                                fontWeight = FontWeight.Thin)
+
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Button(onClick = {
+                            val fileDialog = java.awt.FileDialog(ComposeWindow())
+                            fileDialog.isVisible = true
+                            val file = fileDialog.file   //get file
+                            val directory = fileDialog.directory   //get directory
+                            val path = "$directory$file"
+                            imageState.value = path
+                        }) {
+                            Text("Change pic",
+                                fontWeight = FontWeight.Thin)
+                        }
 
                     }
                     Column {
