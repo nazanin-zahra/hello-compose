@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -132,14 +133,33 @@ fun main() = application {
                                 .background(Color.LightGray)
                         )
                     } else {
-                       // val painter=rememberImagePainter
+                        val imageBitmap: ImageBitmap? = remember(imageState.value) {
+
+                            val file = File(imageState.value)
+                            if (file.exists())
+                            loadImageBitmap(file.inputStream())
+                            else
+                                null
+                        }
+                        if (imageBitmap!=null)
+
                         Image(
-                            painter =BitmapPainter(ImageBitmap(100,100,),),
+                            painter =BitmapPainter(imageBitmap),
                             contentDescription = "big avatar of selected user",
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape)
                         )
+                        else
+                            Image(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.LightGray)
+                            )
+
                     }
                     Row {
                         Button(onClick = {
@@ -151,11 +171,11 @@ fun main() = application {
                         }
                         Spacer(modifier = Modifier.width(4.dp))
                         Button(onClick = {
-                            val fileDialog = java.awt.FileDialog(ComposeWindow())
+                            val fileDialog = FileDialog(ComposeWindow())
                             fileDialog.isVisible = true
-                            val file = fileDialog.file   //get file
+                            val fileName = fileDialog.file   //get file
                             val directory = fileDialog.directory   //get directory
-                            val path = "$directory$file"
+                            val path = "$directory$fileName"
                             imageState.value = path
                         }) {
                             Text("Change pic",
