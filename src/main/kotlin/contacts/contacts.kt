@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,6 @@ import androidx.compose.ui.window.application
 import java.awt.FileDialog
 import java.io.File
 import java.sql.DriverManager
-import java.sql.ResultSet
 
 data class Contact(
     val id: Int,
@@ -137,19 +135,19 @@ fun main() = application {
 
                             val file = File(imageState.value)
                             if (file.exists())
-                            loadImageBitmap(file.inputStream())
+                                loadImageBitmap(file.inputStream())
                             else
                                 null
                         }
-                        if (imageBitmap!=null)
+                        if (imageBitmap != null)
 
-                        Image(
-                            painter =BitmapPainter(imageBitmap),
-                            contentDescription = "big avatar of selected user",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(CircleShape)
-                        )
+                            Image(
+                                painter = BitmapPainter(imageBitmap),
+                                contentDescription = "big avatar of selected user",
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(CircleShape)
+                            )
                         else
                             Image(
                                 imageVector = Icons.Default.Person,
@@ -294,14 +292,16 @@ fun main() = application {
                                 val newItem = clickedItem.copy(
                                     name = nameState.value,
                                     phoneNumber = phoneState.value,
-                                    email = emailState.value
+                                    email = emailState.value,
+                                    imageName = imageState.value
                                 )
                                 contacts[clickedIndexState.value!!] = newItem
                                 statement.executeUpdate(
                                     "UPDATE ContactTable SET " +
                                             "ContactName='${newItem.name}', " +
                                             "Email='${newItem.email}', " +
-                                            "Phone='${newItem.phoneNumber}' " +
+                                            "Phone='${newItem.phoneNumber}', " +
+                                            "Avatar='${newItem.imageName}' " +
                                             "WHERE ContactId='${clickedItem.id}'"
                                 )
                             }
@@ -333,13 +333,30 @@ fun ContactItem(contact: Contact, isSelected: Boolean, onContactClick: () -> Uni
                 .padding(8.dp)
                 .fillMaxWidth()
     ) {
-        Image(
-            painter = painterResource(contact.imageName),
-            contentDescription = "This image contains some flower.",
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(50.dp)
-        )
+        val imageBitmap: ImageBitmap? = remember(contact.imageName) {
+            val file = File(contact.imageName)
+            if (file.exists())
+                loadImageBitmap(file.inputStream())
+            else
+                null
+        }
+        if (imageBitmap != null)
+            Image(
+                painter = BitmapPainter(imageBitmap),
+                contentDescription = "This image contains some flower.",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(50.dp)
+            )
+        else
+            Image(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+            )
 
         Spacer(modifier = Modifier.width(12.dp))
 
