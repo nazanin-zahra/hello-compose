@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation(compose.desktop.currentOs)
+    implementation(compose.desktop.macos_arm64)
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
 }
 
