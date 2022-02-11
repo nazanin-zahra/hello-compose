@@ -109,6 +109,9 @@ fun main() = application {
                             onDeleteClick = {
                                 statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
                                 contacts.remove(contact)
+                                nameState.value=""
+                                phoneState.value=""
+                                emailState.value=""
                             })
                     }
                 }
@@ -191,6 +194,7 @@ fun main() = application {
                             label = {
                                 Text("Name")
                             },
+                            readOnly = true,
                             trailingIcon = {
                                 IconButton(onClick = {
                                     nameState.value = ""
