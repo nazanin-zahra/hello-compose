@@ -87,36 +87,61 @@ fun main() = application {
                 val nameErrorState = remember { mutableStateOf<String?>(null) }
                 val emailState = remember { mutableStateOf<String?>(null) }
                 val imageState = remember { mutableStateOf("") }
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .background(color = Color.LightGray)
-                        .fillMaxHeight()
-                ) {
-                    itemsIndexed(contacts) { index, contact ->
-                        val thisItemIsSelected: Boolean = clickedIndexState.value == index
-                        ContactItem(
-                            contact = contact,
-                            isSelected = thisItemIsSelected,
-                            onContactClick = {
-                                nameState.value = contact.name
-                                phoneState.value = contact.phoneNumber
-                                clickedIndexState.value = contacts.indexOf(contact)
-                                phoneHasErrorState.value = false
-                                nameErrorState.value = null
-                                emailState.value = contact.email
-                                imageState.value = contact.imageName
-                            },
-                            onDeleteClick = {
-                                statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
-                                contacts.remove(contact)
-                                nameState.value = ""
-                                phoneState.value = ""
-                                emailState.value = ""
-                            })
+                Box(modifier = Modifier.weight(0.4f)) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .background(color = Color.LightGray)
+                            .fillMaxHeight()
+                    ) {
+                        itemsIndexed(contacts) { index, contact ->
+                            val thisItemIsSelected: Boolean = clickedIndexState.value == index
+                            ContactItem(
+                                contact = contact,
+                                isSelected = thisItemIsSelected,
+                                onContactClick = {
+                                    nameState.value = contact.name
+                                    phoneState.value = contact.phoneNumber
+                                    clickedIndexState.value = contacts.indexOf(contact)
+                                    phoneHasErrorState.value = false
+                                    nameErrorState.value = null
+                                    emailState.value = contact.email
+                                    imageState.value = contact.imageName
+                                },
+                                onDeleteClick = {
+                                    statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
+                                    contacts.remove(contact)
+                                    nameState.value = ""
+                                    phoneState.value = ""
+                                    emailState.value = ""
+                                })
+                        }
+                        item { Spacer(modifier = Modifier.height(100.dp)) }
+                    }
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .align(alignment = Alignment.BottomStart)
+                            .padding(start=12.dp, bottom = 12.dp),
+                        onClick = {
+                            phoneState.value = ""
+                            nameState.value = ""
+                            emailState.value = ""
+                            imageState.value = ""
+                            phoneHasErrorState.value = false
+                            val newEmptyContact = Contact(
+                                id = null,
+                                name = "",
+                                phoneNumber = "",
+                                imageName = "",
+                            )
+                            contacts.add(newEmptyContact)
+                            clickedIndexState.value = contacts.indexOf(newEmptyContact)
+                        },
+                        backgroundColor = Color(0xffff0078),
+                        contentColor = Color.White
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = null)
                     }
                 }
-
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -315,34 +340,14 @@ fun main() = application {
                         Text("Save")
                     }
                     Spacer(modifier = Modifier.height(5.dp))
-                    Box {
-                        FloatingActionButton(
-                            onClick = {
-                                phoneState.value = ""
-                                nameState.value = ""
-                                emailState.value = ""
-                                imageState.value = ""
-                                phoneHasErrorState.value = false
-                                val newEmptyContact = Contact(
-                                    id = null,
-                                    name = "",
-                                    phoneNumber = "",
-                                    imageName = "",
-                                )
-                                contacts.add(newEmptyContact)
-                                clickedIndexState.value = contacts.indexOf(newEmptyContact)
-                            },
-                            backgroundColor = Color(0xffff0078),
-                            contentColor = Color.White
-                        ) {
-                            Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                        }
+
+
                     }
                 }
             }
         }
     }
-}
+
 
 @Composable
 fun ContactItem(contact: Contact, isSelected: Boolean, onContactClick: () -> Unit, onDeleteClick: () -> Unit) {
