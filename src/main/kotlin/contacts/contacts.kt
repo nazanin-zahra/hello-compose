@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
@@ -36,7 +37,7 @@ import java.io.File
 import java.sql.DriverManager
 
 data class Contact(
-    val id: Int,
+    val id: Int?,
     val name: String,
     val phoneNumber: String,
     val imageName: String,
@@ -109,9 +110,9 @@ fun main() = application {
                             onDeleteClick = {
                                 statement.executeUpdate("DELETE FROM ContactTable WHERE ContactId='${contact.id}'")
                                 contacts.remove(contact)
-                                nameState.value=""
-                                phoneState.value=""
-                                emailState.value=""
+                                nameState.value = ""
+                                phoneState.value = ""
+                                emailState.value = ""
                             })
                     }
                 }
@@ -194,7 +195,7 @@ fun main() = application {
                             label = {
                                 Text("Name")
                             },
-                            readOnly = true,
+                            //    readOnly = true,
                             trailingIcon = {
                                 IconButton(onClick = {
                                     nameState.value = ""
@@ -312,6 +313,30 @@ fun main() = application {
                         }
                     ) {
                         Text("Save")
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Box {
+                        FloatingActionButton(
+                            onClick = {
+                                phoneState.value = ""
+                                nameState.value = ""
+                                emailState.value = ""
+                                imageState.value = ""
+                                phoneHasErrorState.value = false
+                                val newEmptyContact = Contact(
+                                    id = null,
+                                    name = "",
+                                    phoneNumber = "",
+                                    imageName = "",
+                                )
+                                contacts.add(newEmptyContact)
+                                clickedIndexState.value = contacts.indexOf(newEmptyContact)
+                            },
+                            backgroundColor = Color(0xffff0078),
+                            contentColor = Color.White
+                        ) {
+                            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                        }
                     }
                 }
             }
