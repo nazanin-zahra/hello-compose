@@ -115,13 +115,14 @@ fun main() = application {
                                     emailState.value = ""
                                 })
                         }
-                        item { Spacer(modifier = Modifier.height(100.dp)) }
+                        item { Spacer(modifier = Modifier.height(70.dp)) }
                     }
                     FloatingActionButton(
                         modifier = Modifier
                             .align(alignment = Alignment.BottomStart)
-                            .padding(start=12.dp, bottom = 12.dp),
+                            .padding(start = 12.dp, bottom = 12.dp),
                         onClick = {
+                            statement.execute("INSERT INTO ContactTable (ContactName,Phone,Email,Avatar) VALUES ('','','','')")
                             phoneState.value = ""
                             nameState.value = ""
                             emailState.value = ""
@@ -141,6 +142,7 @@ fun main() = application {
                     ) {
                         Icon(imageVector = Icons.Default.Add, contentDescription = null)
                     }
+
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -216,6 +218,8 @@ fun main() = application {
                             onValueChange = { newValue ->
                                 if (newValue.length <= 20)
                                     nameState.value = newValue
+                                else if (newValue.length > 3)
+                                    nameErrorState.value = null
                             },
                             label = {
                                 Text("Name")
@@ -339,14 +343,11 @@ fun main() = application {
                     ) {
                         Text("Save")
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
-
-
-                    }
                 }
             }
         }
     }
+}
 
 
 @Composable
